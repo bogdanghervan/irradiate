@@ -1,0 +1,22 @@
+{
+    "name": "bogdanghervan/irradiate",
+    "description": "Database wizardry on top of Laravel excellence.",
+    "keywords": ["laravel", "irradiate"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Bogdan Ghervan",
+            "email": "bogdan.ghervan@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/database": "5.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Irradiate\\": "src/Irradiate"
+        }
+    },
+    "minimum-stability": "stable"
+}
