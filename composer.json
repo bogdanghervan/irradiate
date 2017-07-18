@@ -1,7 +1,11 @@
 {
     "name": "bogdanghervan/irradiate",
     "description": "Database wizardry on top of Laravel excellence.",
-    "keywords": ["laravel", "irradiate"],
+    "support": {
+        "issues": "https://github.com/bogdanghervan/irradiate/issues",
+        "source": "https://github.com/bogdanghervan/irradiate"
+    },
+    "keywords": ["laravel", "irradiate", "database", "sql", "orm"],
     "license": "MIT",
     "authors": [
         {
@@ -11,7 +15,7 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "illuminate/database": "5.*"
+        "illuminate/database": "5.0 - 5.3"
     },
     "autoload": {
         "psr-4": {
