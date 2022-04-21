@@ -17,19 +17,20 @@ class MySqlConnection extends BaseMySqlConnection
 		return $this->withTablePrefix(new MySqlGrammar());
 	}
     
-	/**
-	 * Begin a fluent query against a database table and use our own builder.
-	 *
-	 * @param  string  $table
-	 * @return \Illuminate\Database\Query\Builder
-	 */
-	public function table($table)
+    /**
+     * Begin a fluent query against a database table and use our own builder.
+     *
+     * @param string $table
+     * @param string|null $as
+     * @return \Illuminate\Database\Query\Builder
+     */
+	public function table($table, $as = null)
 	{
 		$processor = $this->getPostProcessor();
 
 		$query = new Query\Builder($this, $this->getQueryGrammar(), $processor);
 
-		return $query->from($table);
+		return $query->from($table, $as);
 	}
     
 	/**
