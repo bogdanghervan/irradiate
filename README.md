@@ -1,14 +1,30 @@
 Laravel Irradiate
 =================
 
+Database wizardry on top of Laravel excellence. This package comes with some goodies to work with data in bulk in Laravel,
+however it is incomplete since it only implements the MySQL grammar ([contribute](#contributing)).
+
 ## Features
 
-* Bulk insert or update
-* Buffered inserts
+### Bulk insert or update
+
+This is done using `INSERT ... ON DUPLICATE KEY UPDATE` for MySQL.
+
+### Buffered inserts
+
+A service is provided that collects data in memory and flushes it to database when a threshold is reached.
+
+### Legacy features
+
 * Chunk results and use limit at the same time
-* Retry starting database transaction when connection is lost
+* Retry starting database transaction when connection is lost (no longer necessary in newer Laravel versions)
 
 ## Installation ##
+
+Simply run this from the root of your Laravel project:
+```
+composer require bogdanghervan/irradiate
+```
 
 For Laravel 5.4:
 ```
