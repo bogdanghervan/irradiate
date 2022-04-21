@@ -26,16 +26,6 @@ Simply run this from the root of your Laravel project:
 composer require bogdanghervan/irradiate
 ```
 
-For Laravel 5.4:
-```
-composer require bogdanghervan/irradiate:5.4.*
-```
-
-For Laravel 5.0 up to and including Laravel 5.3:
-```
-composer require bogdanghervan/irradiate:5.0.*
-```
-
 ## Configuration ##
 
 To start using the package within Laravel, add this to the list of providers in `config/app.php`:
