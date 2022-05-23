@@ -2,27 +2,30 @@
 
 namespace Irradiate\Database\Query\Grammars;
 
+use Illuminate\Database\Query\Grammars\SQLiteGrammar as BaseSQLiteGrammar;
 use Irradiate\Database\Query\Builder;
-use Illuminate\Database\Query\Grammars\MySqlGrammar as BaseMySqlGrammar;
 
 /**
- * Enhanced MySQL grammar.
- * 
+ * Enhanced SQLite grammar.
+ *
  * @author    Bogdan Ghervan <bogdan.ghervan@gmail.com>
  * @package   Irradiate\Database\Query\Grammars
  */
-class MySqlGrammar extends BaseMySqlGrammar
+class SQLiteGrammar extends BaseSQLiteGrammar
 {
-	/**
-	 * Compiles an INSERT INTO... ON DUPLICATE KEY UPDATE... statement into SQL.
+    /**
+     * Compiles an INSERT INTO... ON CONFLICT DO UPDATE... statement into SQL.
      * Loosely based on {@link \Illuminate\Database\Query\Grammars\Grammar::compileInsert}.
-	 *
-	 * @param  \Irradiate\Database\Query\Builder $query
-	 * @param  array $values
-	 * @param  array $updateables
-	 * @param  array $conflictColumns (ignored)
-	 * @return string
-	 */
+     * 
+     * The upsert syntax was added to SQLite with version 3.24.0 (2018-06-04),
+     * so it will not work for versions of PDO including an older libsqlite.
+     *
+     * @param  \Irradiate\Database\Query\Builder $query
+     * @param  array $values
+     * @param  array $updateables
+     * @param  array $conflictColumns
+     * @return string
+     */
     public function compileInsertOrUpdate(Builder $query, array $values, array $updateables, array $conflictColumns = [])
     {
         // Essentially we will force every insert to be treated as a batch insert which
@@ -35,7 +38,7 @@ class MySqlGrammar extends BaseMySqlGrammar
         }
         
         $columns = $this->columnize(array_keys(reset($values)));
-
+        
         // We need to build a list of parameter place-holders of values that are bound
         // to the query. Each insert should have the exact same amount of parameter
         // bindings so we can just go off the first list of values in this array.
@@ -46,14 +49,15 @@ class MySqlGrammar extends BaseMySqlGrammar
         $parameters = implode(', ', $value);
         
         $updateables = $this->updateables($updateables);
+        $onConflict = $this->compileOnConflict($conflictColumns);
         
-        return "insert into $table ($columns) values $parameters on duplicate key update $updateables";
+        return "insert into $table ($columns) values $parameters $onConflict do update set $updateables";
     }
     
     /**
-     * Builds the list of columns to be updated in a INSERT INTO... ON DUPLICATE KEY UPDATE...
+     * Builds the list of columns to be updated in a INSERT INTO... ON CONFLICT DO UPDATE...
      * statement.
-     * 
+     *
      * @param  array $updateables
      * @return string
      */
@@ -61,9 +65,24 @@ class MySqlGrammar extends BaseMySqlGrammar
     {
         $updateablesList = [];
         foreach ($updateables as $updateable) {
-            $updateablesList[] = sprintf('%1$s = VALUES(%1$s)', $updateable);
+            $updateablesList[] = sprintf('%1$s = excluded.%1$s', $updateable);
         }
         
         return implode(', ', $updateablesList);
+    }
+    
+    /**
+     * Compiles the ON CONFLICT clause of an INSERT statement.
+     *
+     * @param array $conflictColumns
+     * @return string
+     */
+    protected function compileOnConflict(array $conflictColumns)
+    {
+        return 'on conflict' . (
+            count($conflictColumns) ?
+                ('(' . $this->columnize($conflictColumns) . ')') :
+                ''
+            );
     }
 }

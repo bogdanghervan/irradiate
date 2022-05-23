@@ -18,11 +18,16 @@ class Builder extends BaseBuilder
      * Insert a new record or a set of records into the database,
      * or updates existing record(s).
      *
-     * @param  array $values
-     * @param  array $updateables
-     * @return bool
+     * @param  array $values The values that should be inserted or updated.
+     * @param  array $updateables The columns that should be updated when the
+     *   uniqueness constraint is triggered.
+     * @param  array $conflictColumns A list of columns that comprise the uniqueness
+     *   constraint must be given for SQLite versions older than 2021-03-12 (3.35.0).
+     *   The given column(s) must be already defined as unique or primary keys.
+     *   This parameter is ignored for MySQL.
+     *   @return bool
      */
-    public function insertOrUpdate(array $values, array $updateables)
+    public function insertOrUpdate(array $values, array $updateables, array $conflictColumns = [])
     {
         if (empty($values)) {
             return true;
@@ -56,7 +61,7 @@ class Builder extends BaseBuilder
             }
         }
         
-        $sql = $this->grammar->compileInsertOrUpdate($this, $values, $updateables);
+        $sql = $this->grammar->compileInsertOrUpdate($this, $values, $updateables, $conflictColumns);
         
         // Once we have compiled the insert statement's SQL we can execute it on the
         // connection and return a result as a boolean success indicator as that
