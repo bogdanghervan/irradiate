@@ -2,13 +2,13 @@ Laravel Irradiate
 =================
 
 Database wizardry on top of Laravel excellence. This package comes with some goodies to work with data in bulk in Laravel,
-however it is incomplete since it only implements the MySQL grammar ([contribute](#contributing)).
+however it is incomplete since it only implements the MySQL and SQLite grammars ([contribute](#contributing)).
 
 ## Features
 
 ### Bulk insert or update
 
-This is done using `INSERT ... ON DUPLICATE KEY UPDATE` for MySQL.
+This is achieved using `INSERT ... ON DUPLICATE KEY UPDATE` for MySQL and `INSERT ... ON CONFLICT DO UPDATE` for SQLite. 
 
 ### Buffered inserts
 
@@ -17,23 +17,13 @@ A service is provided that collects data in memory and flushes it to database wh
 ### Legacy features
 
 * Chunk results and use limit at the same time
-* Retry starting database transaction when connection is lost (no longer necessary in newer Laravel versions)
+* (MySQL only) Retry starting database transaction when connection is lost (no longer necessary in newer Laravel versions)
 
 ## Installation ##
 
 Simply run this from the root of your Laravel project:
 ```
 composer require bogdanghervan/irradiate
-```
-
-For Laravel 5.4:
-```
-composer require bogdanghervan/irradiate:5.4.*
-```
-
-For Laravel 5.0 up to and including Laravel 5.3:
-```
-composer require bogdanghervan/irradiate:5.0.*
 ```
 
 ## Configuration ##
@@ -50,7 +40,7 @@ You're good to go!
 
 ## Limitations
 
-MySQL only.
+MySQL and SQLite only.
 
 ## Contributing
 
