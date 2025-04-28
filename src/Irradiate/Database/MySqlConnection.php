@@ -14,7 +14,7 @@ class MySqlConnection extends BaseMySqlConnection
 	 */
 	protected function getDefaultQueryGrammar()
 	{
-		return $this->withTablePrefix(new MySqlGrammar());
+		return new MySqlGrammar($this);
 	}
     
     /**
