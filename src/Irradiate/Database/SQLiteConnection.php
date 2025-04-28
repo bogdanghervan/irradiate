@@ -14,7 +14,7 @@ class SQLiteConnection extends BaseSQLiteConnection
      */
     protected function getDefaultQueryGrammar()
     {
-        return $this->withTablePrefix(new SQLiteGrammar());
+        return new SQLiteGrammar($this);
     }
     
     /**

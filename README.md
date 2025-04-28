@@ -26,6 +26,10 @@ Simply run this from the root of your Laravel project:
 composer require bogdanghervan/irradiate
 ```
 
+## Compatibility ##
+
+This package supports Laravel 6, 7, 8, 9, 10, 11, and 12.
+
 ## Configuration ##
 
 To start using the package within Laravel, add this to the list of providers in `config/app.php`:
@@ -33,6 +37,8 @@ To start using the package within Laravel, add this to the list of providers in 
 ```
 'Irradiate\Database\DatabaseServiceProvider',
 ```
+
+Or, for Laravel 5.5 and above (including Laravel 12), the package will be auto-discovered.
 
 Additionally, all the models should inherit from `\Irradiate\Database\Eloquent\Model`. Ideally there should already be a generic base model at the application level that all concrete models extend from, so make that extend the base model within Irradiate.
 
