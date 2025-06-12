@@ -67,16 +67,20 @@ class MySqlConnection extends BaseMySqlConnection
     protected function retryTransactionIfCausedByLostConnection(\PDOException $e)
     {
         $message = $e->getMessage();
-        if (str_contains($message, [
-			'server has gone away',
-			'no connection to the server',
-			'Lost connection',
-		]))
-        {
-            $this->reconnect();
-            
-            parent::beginTransaction();
-            return;
+
+        $needles = [
+            'server has gone away',
+            'no connection to the server',
+            'Lost connection',
+        ];
+
+        foreach ($needles as $needle) {
+            if (str_contains($message, $needle)) {
+                $this->reconnect();
+
+                parent::beginTransaction();
+                return;
+            }
         }
         
         throw $e;
